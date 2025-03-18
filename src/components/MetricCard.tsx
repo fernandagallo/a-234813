@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -5,16 +6,21 @@ import 'react-circular-progressbar/dist/styles.css';
 interface MetricCardProps {
   title: string;
   value: number;
+  total?: number;
   color: string;
+  unit?: string;
 }
 
-const MetricCard = ({ title, value, color }: MetricCardProps) => {
+const MetricCard = ({ title, value, total, color, unit = '%' }: MetricCardProps) => {
+  const percentage = total ? Math.round((value / total) * 100) : value;
+  const displayValue = unit === '%' ? `${percentage}${unit}` : `${value}${unit}`;
+  
   return (
     <div className="metric-card">
       <div className="relative w-32 h-32 mb-6">
         <CircularProgressbar
-          value={value}
-          text={`${value}%`}
+          value={percentage}
+          text={displayValue}
           styles={buildStyles({
             textSize: '1.25rem',
             pathColor: color,
@@ -24,6 +30,11 @@ const MetricCard = ({ title, value, color }: MetricCardProps) => {
         />
       </div>
       <h3 className="text-lg font-medium text-dashboard-text">{title}</h3>
+      {total && (
+        <p className="text-sm text-dashboard-muted mt-1">
+          {value} de {total} {unit !== '%' ? unit : ''}
+        </p>
+      )}
     </div>
   );
 };
