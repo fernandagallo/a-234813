@@ -1,3 +1,4 @@
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LayoutDashboard, Settings, Users } from "lucide-react";
 
@@ -36,7 +37,7 @@ const SidePanel = ({ onTabChange }: SidePanelProps) => {
               className="w-full justify-start gap-2 data-[state=active]:bg-white/10 data-[state=active]:text-white"
             >
               <Settings className="w-4 h-4" />
-              Settings
+              Ações e Conformidade
             </TabsTrigger>
           </TabsList>
         </Tabs>
