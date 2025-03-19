@@ -1,12 +1,20 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { FileKey, Key, Eye } from 'lucide-react';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { actionsData } from '@/data/mockData';
 import { getActionColor } from '@/utils/statusUtils';
 import CustomerRequests from '@/components/CustomerRequests';
+import { Button } from "@/components/ui/button";
+import { 
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const ActionsTab = () => {
+  const filesToEncrypt = actionsData.filter(action => action.action === 'Criptografar');
+  
   return (
     <>
       <header className="mb-8">
@@ -14,7 +22,32 @@ const ActionsTab = () => {
         <p className="text-dashboard-muted">Ações recomendadas para mitigar riscos identificados</p>
       </header>
       
-      <div className="dashboard-card mb-6">
+      <div className="dashboard-card mb-6 relative">
+        <div className="absolute top-2 right-2">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8 text-purple-500 hover:text-purple-700">
+                <Eye className="h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80">
+              <div className="space-y-2">
+                <h3 className="font-medium text-purple-500 flex items-center gap-2">
+                  <FileKey className="h-4 w-4" /> 
+                  Arquivos a Criptografar
+                </h3>
+                <ul className="text-sm space-y-1">
+                  {filesToEncrypt.map((file, idx) => (
+                    <li key={idx} className="truncate hover:text-purple-500">
+                      {file.uri} <span className="text-xs text-gray-500">({file.size})</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+        
         <Table>
           <TableHeader>
             <TableRow>
