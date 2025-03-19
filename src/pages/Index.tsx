@@ -1,4 +1,3 @@
-
 import { Server, FileText, ShieldAlert, FileKey, FileLock, ScanSearch, Eye, Lock, Key, Bell, Globe, Shield, BookOpen, CheckCircle, AlertCircle, FileCheck, FileX, ListChecks } from 'lucide-react';
 import MetricCard from '@/components/MetricCard';
 import MonthlyChart from '@/components/MonthlyChart';
@@ -8,7 +7,6 @@ import { useState } from 'react';
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
-
 const Index = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
 
@@ -22,33 +20,96 @@ const Index = () => {
     corporateDocs: 986,
     governmentDocs: 421
   };
-
-  const risksData = [
-    { hash: "3f8a9b2c1d...", uri: "/storage/finance/2023/q4-report.pdf", language: "Português", riskLevel: "Crítico" },
-    { hash: "7d4e2f1a9c...", uri: "/storage/hr/employees/personal-data.xlsx", language: "Inglês", riskLevel: "Alto" },
-    { hash: "2c5d8e3f1a...", uri: "/storage/contracts/nda-2023.docx", language: "Português", riskLevel: "Médio" },
-    { hash: "9a3b5c7d2e...", uri: "/storage/marketing/campaign-analytics.xlsx", language: "Espanhol", riskLevel: "Baixo" },
-    { hash: "1e4f7a9d3b...", uri: "/storage/legal/compliance/gdpr-audit.pdf", language: "Inglês", riskLevel: "Alto" },
-  ];
-
-  const actionsData = [
-    { hash: "3f8a9b2c1d...", uri: "/storage/finance/2023/q4-report.pdf", size: "2.4 MB", permissions: "Público", action: "Criptografar" },
-    { hash: "7d4e2f1a9c...", uri: "/storage/hr/employees/personal-data.xlsx", size: "4.6 MB", permissions: "Departamento RH", action: "Restringir Acesso" },
-    { hash: "2c5d8e3f1a...", uri: "/storage/contracts/nda-2023.docx", size: "1.2 MB", permissions: "Departamento Legal", action: "Monitorar" },
-    { hash: "9a3b5c7d2e...", uri: "/storage/marketing/campaign-analytics.xlsx", size: "3.8 MB", permissions: "Equipe Marketing", action: "Restringir Acesso" },
-    { hash: "1e4f7a9d3b...", uri: "/storage/legal/compliance/gdpr-audit.pdf", size: "5.1 MB", permissions: "Administradores", action: "Criptografar" },
-  ];
-
-  const complianceData = [
-    { hash: "3f8a9b2c1d...", uri: "/storage/finance/2023/q4-report.pdf", regulation: "LGPD", requirement: "Armazenamento Seguro", status: "Em Risco" },
-    { hash: "7d4e2f1a9c...", uri: "/storage/hr/employees/personal-data.xlsx", regulation: "GDPR", requirement: "Consentimento", status: "Não Atendido" },
-    { hash: "2c5d8e3f1a...", uri: "/storage/contracts/nda-2023.docx", regulation: "HIPAA", requirement: "Controle de Acesso", status: "Atendido" },
-    { hash: "9a3b5c7d2e...", uri: "/storage/marketing/campaign-analytics.xlsx", regulation: "CCPA", requirement: "Direito de Exclusão", status: "Atendido" },
-    { hash: "1e4f7a9d3b...", uri: "/storage/legal/compliance/gdpr-audit.pdf", regulation: "LGPD", requirement: "Relatório de Impacto", status: "Não Atendido" },
-  ];
-
-  const getStatusColor = (status) => {
-    switch(status) {
+  const risksData = [{
+    hash: "3f8a9b2c1d...",
+    uri: "/storage/finance/2023/q4-report.pdf",
+    language: "Português",
+    riskLevel: "Crítico"
+  }, {
+    hash: "7d4e2f1a9c...",
+    uri: "/storage/hr/employees/personal-data.xlsx",
+    language: "Inglês",
+    riskLevel: "Alto"
+  }, {
+    hash: "2c5d8e3f1a...",
+    uri: "/storage/contracts/nda-2023.docx",
+    language: "Português",
+    riskLevel: "Médio"
+  }, {
+    hash: "9a3b5c7d2e...",
+    uri: "/storage/marketing/campaign-analytics.xlsx",
+    language: "Espanhol",
+    riskLevel: "Baixo"
+  }, {
+    hash: "1e4f7a9d3b...",
+    uri: "/storage/legal/compliance/gdpr-audit.pdf",
+    language: "Inglês",
+    riskLevel: "Alto"
+  }];
+  const actionsData = [{
+    hash: "3f8a9b2c1d...",
+    uri: "/storage/finance/2023/q4-report.pdf",
+    size: "2.4 MB",
+    permissions: "Público",
+    action: "Criptografar"
+  }, {
+    hash: "7d4e2f1a9c...",
+    uri: "/storage/hr/employees/personal-data.xlsx",
+    size: "4.6 MB",
+    permissions: "Departamento RH",
+    action: "Restringir Acesso"
+  }, {
+    hash: "2c5d8e3f1a...",
+    uri: "/storage/contracts/nda-2023.docx",
+    size: "1.2 MB",
+    permissions: "Departamento Legal",
+    action: "Monitorar"
+  }, {
+    hash: "9a3b5c7d2e...",
+    uri: "/storage/marketing/campaign-analytics.xlsx",
+    size: "3.8 MB",
+    permissions: "Equipe Marketing",
+    action: "Restringir Acesso"
+  }, {
+    hash: "1e4f7a9d3b...",
+    uri: "/storage/legal/compliance/gdpr-audit.pdf",
+    size: "5.1 MB",
+    permissions: "Administradores",
+    action: "Criptografar"
+  }];
+  const complianceData = [{
+    hash: "3f8a9b2c1d...",
+    uri: "/storage/finance/2023/q4-report.pdf",
+    regulation: "LGPD",
+    requirement: "Armazenamento Seguro",
+    status: "Em Risco"
+  }, {
+    hash: "7d4e2f1a9c...",
+    uri: "/storage/hr/employees/personal-data.xlsx",
+    regulation: "GDPR",
+    requirement: "Consentimento",
+    status: "Não Atendido"
+  }, {
+    hash: "2c5d8e3f1a...",
+    uri: "/storage/contracts/nda-2023.docx",
+    regulation: "HIPAA",
+    requirement: "Controle de Acesso",
+    status: "Atendido"
+  }, {
+    hash: "9a3b5c7d2e...",
+    uri: "/storage/marketing/campaign-analytics.xlsx",
+    regulation: "CCPA",
+    requirement: "Direito de Exclusão",
+    status: "Atendido"
+  }, {
+    hash: "1e4f7a9d3b...",
+    uri: "/storage/legal/compliance/gdpr-audit.pdf",
+    regulation: "LGPD",
+    requirement: "Relatório de Impacto",
+    status: "Não Atendido"
+  }];
+  const getStatusColor = status => {
+    switch (status) {
       case 'Alto':
       case 'Crítico':
       case 'Não Atendido':
@@ -63,9 +124,8 @@ const Index = () => {
         return '';
     }
   };
-
-  const getActionColor = (action) => {
-    switch(action) {
+  const getActionColor = action => {
+    switch (action) {
       case 'Criptografar':
         return 'text-purple-500';
       case 'Restringir Acesso':
@@ -76,74 +136,35 @@ const Index = () => {
         return '';
     }
   };
-
   const renderContent = () => {
     switch (activeTab) {
       case 'dashboard':
-        return (
-          <>
+        return <>
             <header className="mb-8">
               <h1 className="text-3xl font-medium mb-2">Visão Geral</h1>
               <p className="text-dashboard-muted">Dashboard de descoberta e classificação de dados para proteção de dados</p>
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-              <MetricCard
-                title="Hosts"
-                value={dataOverview.hosts}
-                color="#7EBF8E"
-                unit=""
-              />
-              <MetricCard
-                title="Total de Documentos"
-                value={dataOverview.totalDocuments}
-                color="#61AAF2"
-                unit=""
-              />
-              <MetricCard
-                title="Docs. Confidenciais"
-                value={dataOverview.confidentialDocs}
-                total={dataOverview.totalDocuments}
-                color="#FF6B6B"
-              />
-              <MetricCard
-                title="Docs. com PII"
-                value={dataOverview.piiDocs}
-                total={dataOverview.totalDocuments}
-                color="#FFD166"
-              />
+              <MetricCard title="Hosts" value={dataOverview.hosts} color="#7EBF8E" unit="" />
+              <MetricCard title="Total de Documentos" value={dataOverview.totalDocuments} color="#61AAF2" unit="" />
+              <MetricCard title="Docs. Confidenciais" value={dataOverview.confidentialDocs} total={dataOverview.totalDocuments} color="#FF6B6B" />
+              <MetricCard title="Docs. com PII" value={dataOverview.piiDocs} total={dataOverview.totalDocuments} color="#FFD166" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-              <MetricCard
-                title="PII Sensível"
-                value={dataOverview.sensitivePiiDocs}
-                total={dataOverview.totalDocuments}
-                color="#8989DE"
-              />
-              <MetricCard
-                title="Docs. Corporativos"
-                value={dataOverview.corporateDocs}
-                total={dataOverview.totalDocuments}
-                color="#4ECDC4"
-              />
-              <MetricCard
-                title="Docs. Governamentais"
-                value={dataOverview.governmentDocs}
-                total={dataOverview.totalDocuments}
-                color="#F9C80E"
-              />
+              <MetricCard title="PII Sensível" value={dataOverview.sensitivePiiDocs} total={dataOverview.totalDocuments} color="#8989DE" />
+              <MetricCard title="Docs. Corporativos" value={dataOverview.corporateDocs} total={dataOverview.totalDocuments} color="#4ECDC4" />
+              <MetricCard title="Docs. Governamentais" value={dataOverview.governmentDocs} total={dataOverview.totalDocuments} color="#F9C80E" />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <MonthlyChart />
               <CustomerRequests />
             </div>
-          </>
-        );
+          </>;
       case 'users':
-        return (
-          <>
+        return <>
             <header className="mb-8">
               <h1 className="text-3xl font-medium mb-2">Principais Riscos Identificados</h1>
               <p className="text-dashboard-muted">Documentos com maiores riscos de segurança e privacidade</p>
@@ -160,20 +181,18 @@ const Index = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {risksData.map((risk, index) => (
-                    <TableRow key={index}>
+                  {risksData.map((risk, index) => <TableRow key={index}>
                       <TableCell className="font-mono">{risk.hash}</TableCell>
                       <TableCell className="max-w-xs truncate">{risk.uri}</TableCell>
                       <TableCell>{risk.language}</TableCell>
                       <TableCell className={getStatusColor(risk.riskLevel)}>{risk.riskLevel}</TableCell>
-                    </TableRow>
-                  ))}
+                    </TableRow>)}
                 </TableBody>
               </Table>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="dashboard-card">
+              <div className="insira um tool tip no canto superior direito que listem os arquivos com riscos criticos">
                 <div className="flex items-center gap-3 mb-4">
                   <ShieldAlert className="w-5 h-5 text-red-400" />
                   <h2 className="text-xl font-medium">Riscos Críticos</h2>
@@ -209,11 +228,9 @@ const Index = () => {
                 <p className="text-dashboard-muted mt-2">Sob controle</p>
               </div>
             </div>
-          </>
-        );
+          </>;
       case 'settings':
-        return (
-          <>
+        return <>
             <Tabs defaultValue="actions" className="w-full">
               <TabsList className="mb-6 bg-dashboard-card">
                 <TabsTrigger value="actions">Ações Prioritárias</TabsTrigger>
@@ -238,15 +255,13 @@ const Index = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {actionsData.map((action, index) => (
-                        <TableRow key={index}>
+                      {actionsData.map((action, index) => <TableRow key={index}>
                           <TableCell className="font-mono">{action.hash}</TableCell>
                           <TableCell className="max-w-xs truncate">{action.uri}</TableCell>
                           <TableCell>{action.size}</TableCell>
                           <TableCell>{action.permissions}</TableCell>
                           <TableCell className={getActionColor(action.action)}>{action.action}</TableCell>
-                        </TableRow>
-                      ))}
+                        </TableRow>)}
                     </TableBody>
                   </Table>
                 </div>
@@ -299,15 +314,13 @@ const Index = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {complianceData.map((compliance, index) => (
-                        <TableRow key={index}>
+                      {complianceData.map((compliance, index) => <TableRow key={index}>
                           <TableCell className="font-mono">{compliance.hash}</TableCell>
                           <TableCell className="max-w-xs truncate">{compliance.uri}</TableCell>
                           <TableCell>{compliance.regulation}</TableCell>
                           <TableCell>{compliance.requirement}</TableCell>
                           <TableCell className={getStatusColor(compliance.status)}>{compliance.status}</TableCell>
-                        </TableRow>
-                      ))}
+                        </TableRow>)}
                     </TableBody>
                   </Table>
                 </div>
@@ -383,23 +396,18 @@ const Index = () => {
                 </div>
               </TabsContent>
             </Tabs>
-          </>
-        );
+          </>;
       default:
         return null;
     }
   };
-
-  return (
-    <div className="min-h-screen">
+  return <div className="min-h-screen">
       <SidePanel onTabChange={setActiveTab} />
       <div className="pl-64">
         <div className="p-8">
           {renderContent()}
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
