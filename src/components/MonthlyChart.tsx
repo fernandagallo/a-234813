@@ -1,3 +1,4 @@
+
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
 const data = [
@@ -18,7 +19,7 @@ const data = [
 const MonthlyChart = () => {
   return (
     <div className="dashboard-card h-[400px]">
-      <h2 className="text-xl font-medium mb-6">Monthly Income</h2>
+      <h2 className="text-xl font-medium mb-6">Riscos Críticos Mensais</h2>
       <div className="h-[calc(100%-4rem)]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
