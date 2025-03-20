@@ -4,6 +4,7 @@ import SidePanel from '@/components/SidePanel';
 import DashboardTab from '@/components/dashboard/DashboardTab';
 import UsersTab from '@/components/users/UsersTab';
 import SettingsTab from '@/components/settings/SettingsTab';
+import RulesTab from '@/components/rules/RulesTab';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -14,6 +15,8 @@ const Index = () => {
         return <DashboardTab />;
       case 'users':
         return <UsersTab />;
+      case 'rules':
+        return <RulesTab />;
       case 'settings':
         return <SettingsTab />;
       default:
