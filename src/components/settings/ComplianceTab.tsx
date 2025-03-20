@@ -6,7 +6,21 @@ import { complianceData } from '@/data/mockData';
 import { getStatusColor } from '@/utils/statusUtils';
 import CustomerRequests from '@/components/CustomerRequests';
 
+// Mock user and department data to match with the compliance documents
+const userAssignments = [
+  { hash: "3f8a9b2c1d...", username: "Ana Silva", department: "Segurança" },
+  { hash: "7d4e2f1a9c...", username: "Carlos Mendes", department: "RH" },
+  { hash: "2c5d8e3f1a...", username: "Juliana Costa", department: "Legal" },
+  { hash: "9a3b5c7d2e...", username: "Roberto Alves", department: "Marketing" },
+  { hash: "1e4f7a9d3b...", username: "Patricia Lima", department: "Compliance" },
+];
+
 const ComplianceTab = () => {
+  // Function to find user assignment by hash
+  const getUserAssignment = (hash) => {
+    return userAssignments.find(user => user.hash === hash) || { username: "Não atribuído", department: "N/A" };
+  };
+
   return (
     <>
       <header className="mb-8">
@@ -18,6 +32,8 @@ const ComplianceTab = () => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Usuário</TableHead>
+              <TableHead>Setor</TableHead>
               <TableHead>Hash</TableHead>
               <TableHead>URI</TableHead>
               <TableHead>Regulamento</TableHead>
@@ -26,15 +42,20 @@ const ComplianceTab = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {complianceData.map((compliance, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-mono">{compliance.hash}</TableCell>
-                <TableCell className="max-w-xs truncate">{compliance.uri}</TableCell>
-                <TableCell>{compliance.regulation}</TableCell>
-                <TableCell>{compliance.requirement}</TableCell>
-                <TableCell className={getStatusColor(compliance.status)}>{compliance.status}</TableCell>
-              </TableRow>
-            ))}
+            {complianceData.map((compliance, index) => {
+              const { username, department } = getUserAssignment(compliance.hash);
+              return (
+                <TableRow key={index}>
+                  <TableCell>{username}</TableCell>
+                  <TableCell>{department}</TableCell>
+                  <TableCell className="font-mono">{compliance.hash}</TableCell>
+                  <TableCell className="max-w-xs truncate">{compliance.uri}</TableCell>
+                  <TableCell>{compliance.regulation}</TableCell>
+                  <TableCell>{compliance.requirement}</TableCell>
+                  <TableCell className={getStatusColor(compliance.status)}>{compliance.status}</TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>

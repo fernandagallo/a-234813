@@ -12,8 +12,22 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+// Mock user and department data to match with the documents
+const userAssignments = [
+  { hash: "3f8a9b2c1d...", username: "Ana Silva", department: "Segurança" },
+  { hash: "7d4e2f1a9c...", username: "Carlos Mendes", department: "RH" },
+  { hash: "2c5d8e3f1a...", username: "Juliana Costa", department: "Legal" },
+  { hash: "9a3b5c7d2e...", username: "Roberto Alves", department: "Marketing" },
+  { hash: "1e4f7a9d3b...", username: "Patricia Lima", department: "Compliance" },
+];
+
 const ActionsTab = () => {
   const filesToEncrypt = actionsData.filter(action => action.action === 'Criptografar');
+  
+  // Function to find user assignment by hash
+  const getUserAssignment = (hash) => {
+    return userAssignments.find(user => user.hash === hash) || { username: "Não atribuído", department: "N/A" };
+  };
   
   return (
     <>
@@ -51,6 +65,8 @@ const ActionsTab = () => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Usuário</TableHead>
+              <TableHead>Setor</TableHead>
               <TableHead>Hash</TableHead>
               <TableHead>URI</TableHead>
               <TableHead>Tamanho</TableHead>
@@ -59,15 +75,20 @@ const ActionsTab = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {actionsData.map((action, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-mono">{action.hash}</TableCell>
-                <TableCell className="max-w-xs truncate">{action.uri}</TableCell>
-                <TableCell>{action.size}</TableCell>
-                <TableCell>{action.permissions}</TableCell>
-                <TableCell className={getActionColor(action.action)}>{action.action}</TableCell>
-              </TableRow>
-            ))}
+            {actionsData.map((action, index) => {
+              const { username, department } = getUserAssignment(action.hash);
+              return (
+                <TableRow key={index}>
+                  <TableCell>{username}</TableCell>
+                  <TableCell>{department}</TableCell>
+                  <TableCell className="font-mono">{action.hash}</TableCell>
+                  <TableCell className="max-w-xs truncate">{action.uri}</TableCell>
+                  <TableCell>{action.size}</TableCell>
+                  <TableCell>{action.permissions}</TableCell>
+                  <TableCell className={getActionColor(action.action)}>{action.action}</TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>
