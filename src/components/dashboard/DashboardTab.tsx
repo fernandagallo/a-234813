@@ -9,7 +9,7 @@ const DashboardTab = () => {
   return (
     <>
       <header className="mb-8">
-        <h1 className="text-3xl font-medium mb-2">Visão Geral</h1>
+        <h1 className="text-3xl font-medium mb-2">Central de Monitoramento</h1>
         <p className="text-dashboard-muted">Dashboard de descoberta e classificação de dados para proteção de dados</p>
       </header>
 

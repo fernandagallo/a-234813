@@ -23,14 +23,14 @@ const SidePanel = ({ onTabChange }: SidePanelProps) => {
               className="w-full justify-start gap-2 data-[state=active]:bg-white/10 data-[state=active]:text-white"
             >
               <LayoutDashboard className="w-4 h-4" />
-              Dashboard
+              Central de Monitoramento
             </TabsTrigger>
             <TabsTrigger 
               value="users" 
               className="w-full justify-start gap-2 data-[state=active]:bg-white/10 data-[state=active]:text-white"
             >
               <Users className="w-4 h-4" />
-              Users
+              Usuários
             </TabsTrigger>
             <TabsTrigger 
               value="rules" 
