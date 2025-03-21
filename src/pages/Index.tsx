@@ -5,7 +5,6 @@ import DashboardTab from '@/components/dashboard/DashboardTab';
 import UsersTab from '@/components/users/UsersTab';
 import SettingsTab from '@/components/settings/SettingsTab';
 import RulesTab from '@/components/rules/RulesTab';
-import InsightsTab from '@/components/insights/InsightsTab';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -18,8 +17,6 @@ const Index = () => {
         return <UsersTab />;
       case 'rules':
         return <RulesTab />;
-      case 'insights':
-        return <InsightsTab />;
       case 'settings':
         return <SettingsTab />;
       default:
