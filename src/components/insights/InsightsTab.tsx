@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import SharingGraph from './SharingGraph';
 import SharingStats from './SharingStats';
 import UserFilter from './UserFilter';
+import FileShareTable from './FileShareTable';
+import MonitoringCharts from './MonitoringCharts';
 import { allUsers } from '@/data/insightsData';
 
 const InsightsTab = () => {
@@ -29,6 +31,10 @@ const InsightsTab = () => {
             <SharingGraph selectedUser={selectedUser} />
           </div>
         </div>
+        
+        <MonitoringCharts />
+        
+        <FileShareTable />
         
         <SharingStats />
       </div>
