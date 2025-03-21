@@ -1,6 +1,6 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LayoutDashboard, Settings, Users, Shield } from "lucide-react";
+import { LayoutDashboard, Settings, Users, Shield, Share2 } from "lucide-react";
 
 interface SidePanelProps {
   onTabChange: (value: string) => void;
@@ -38,6 +38,13 @@ const SidePanel = ({ onTabChange }: SidePanelProps) => {
             >
               <Shield className="w-4 h-4" />
               Gerenciamento de Regras
+            </TabsTrigger>
+            <TabsTrigger 
+              value="shares" 
+              className="w-full justify-start gap-2 data-[state=active]:bg-white/10 data-[state=active]:text-white"
+            >
+              <Share2 className="w-4 h-4" />
+              Compartilhamentos
             </TabsTrigger>
             <TabsTrigger 
               value="settings" 
