@@ -160,7 +160,7 @@ const SharesTab = () => {
                 <SelectValue placeholder="Selecione um usuário" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos os usuários</SelectItem>
+                <SelectItem value="all">Todos os usuários</SelectItem>
                 {uniqueUsers.map((user) => (
                   <SelectItem key={user} value={user}>
                     {user} ({userDepartments[user as keyof typeof userDepartments]})
