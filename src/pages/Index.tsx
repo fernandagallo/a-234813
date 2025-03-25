@@ -6,6 +6,7 @@ import UsersTab from '@/components/users/UsersTab';
 import SettingsTab from '@/components/settings/SettingsTab';
 import RulesTab from '@/components/rules/RulesTab';
 import SharesTab from '@/components/shares/SharesTab';
+import FilesTab from '@/components/files/FilesTab';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -14,6 +15,8 @@ const Index = () => {
     switch (activeTab) {
       case 'dashboard':
         return <DashboardTab />;
+      case 'files':
+        return <FilesTab />;
       case 'users':
         return <UsersTab />;
       case 'rules':
