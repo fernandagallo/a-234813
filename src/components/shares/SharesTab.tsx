@@ -1,6 +1,6 @@
 
-import { useState, useMemo } from "react";
-import { Share2, Users, ChartNetwork } from "lucide-react";
+import { useState } from "react";
+import { Share2, Users } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell, ResponsiveContainer 
@@ -11,7 +11,6 @@ import {
 import { sharingRelationships, userDepartments, departmentColors, departmentSharingStats } from "@/data/insightsData";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import SharingRelationshipGraph from "./SharingRelationshipGraph";
 
 const SharesTab = () => {
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
@@ -22,24 +21,6 @@ const SharesTab = () => {
         (rel) => rel.source === selectedUser || rel.target === selectedUser
       )
     : sharingRelationships;
-    
-  // Get users for the graph filtering
-  const graphFilteredUsers = useMemo(() => {
-    if (!selectedUser) return null;
-    
-    const users = new Set([selectedUser]);
-    
-    // Add connected users
-    sharingRelationships.forEach(rel => {
-      if (rel.source === selectedUser) {
-        users.add(rel.target);
-      } else if (rel.target === selectedUser) {
-        users.add(rel.source);
-      }
-    });
-    
-    return Array.from(users);
-  }, [selectedUser]);
 
   // Get unique users for the dropdown
   const uniqueUsers = Array.from(
@@ -179,7 +160,7 @@ const SharesTab = () => {
                 <SelectValue placeholder="Selecione um usuário" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos os usuários</SelectItem>
+                <SelectItem value="all">Todos os usuários</SelectItem>
                 {uniqueUsers.map((user) => (
                   <SelectItem key={user} value={user}>
                     {user} ({userDepartments[user as keyof typeof userDepartments]})
@@ -249,21 +230,6 @@ const SharesTab = () => {
               ))}
             </TableBody>
           </Table>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <ChartNetwork className="h-5 w-5" />
-            Grafo de Relacionamentos
-          </CardTitle>
-          <CardDescription>
-            Visualização das conexões de compartilhamento entre usuários
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <SharingRelationshipGraph filteredUsers={graphFilteredUsers} />
         </CardContent>
       </Card>
     </div>
