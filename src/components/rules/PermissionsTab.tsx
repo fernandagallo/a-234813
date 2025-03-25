@@ -140,8 +140,8 @@ const PermissionsTab = () => {
             <TableRow>
               <TableHead>Nome do Usuário</TableHead>
               <TableHead>Setor</TableHead>
-              <TableHead>Permissões de Acesso</TableHead>
-              <TableHead>Adicionar Regulamento</TableHead>
+              <TableHead>Enquadramento de Regulamentações</TableHead>
+              <TableHead>Adicionar Regras Específicas</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
