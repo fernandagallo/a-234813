@@ -2,7 +2,6 @@
 import React from 'react';
 import MetricCard from '@/components/MetricCard';
 import MonthlyChart from '@/components/MonthlyChart';
-import CustomerRequests from '@/components/CustomerRequests';
 import { dataOverview } from '@/data/mockData';
 
 const DashboardTab = () => {
@@ -26,9 +25,8 @@ const DashboardTab = () => {
         <MetricCard title="Docs. Governamentais" value={dataOverview.governmentDocs} total={dataOverview.totalDocuments} color="#F9C80E" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1">
         <MonthlyChart />
-        <CustomerRequests />
       </div>
     </>
   );
