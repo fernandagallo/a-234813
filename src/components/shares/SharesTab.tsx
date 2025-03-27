@@ -11,9 +11,13 @@ import {
 import { sharingRelationships, userDepartments, departmentColors, departmentSharingStats } from "@/data/insightsData";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const SharesTab = () => {
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
+  const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
 
   // Filter relationships based on selected user
   const filteredRelationships = selectedUser
@@ -36,7 +40,34 @@ const SharesTab = () => {
     filesShared: dept.filesShared,
     connections: dept.connections,
     fill: departmentColors[dept.department as keyof typeof departmentColors] || "#333",
+    filesList: [`${dept.department}_relatorio.pdf`, `${dept.department}_dados.xlsx`, `${dept.department}_analise.docx`]
   }));
+
+  const handleBarClick = (data: any) => {
+    if (data && data.name) {
+      setSelectedDepartment(data.name);
+      setSelectedFiles(data.filesList || []);
+    }
+  };
+
+  const handlePieClick = (data: any, index: number) => {
+    const clickedData = chartData[index];
+    setSelectedDepartment(clickedData.name);
+    setSelectedFiles(clickedData.filesList || []);
+  };
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white/90 dark:bg-gray-800/90 p-2 shadow rounded border border-gray-200 dark:border-gray-700">
+          <p className="font-medium">{payload[0].name}</p>
+          <p>Arquivos: {payload[0].value}</p>
+          <p className="text-xs text-gray-500">Clique para ver detalhes</p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="space-y-6">
@@ -99,17 +130,49 @@ const SharesTab = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="filesShared" name="Arquivos Compartilhados" />
-                <Bar dataKey="connections" name="Conexões" />
-              </BarChart>
-            </ResponsiveContainer>
+            <Dialog>
+              <DialogTrigger asChild>
+                <div className="cursor-pointer w-full h-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart 
+                      data={chartData}
+                      onClick={(data) => handleBarClick(data.activePayload?.[0]?.payload)}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Legend />
+                      <Bar dataKey="filesShared" name="Arquivos Compartilhados" />
+                      <Bar dataKey="connections" name="Conexões" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Arquivos do departamento {selectedDepartment}</DialogTitle>
+                </DialogHeader>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Arquivo</TableHead>
+                      <TableHead>Ações</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {selectedFiles.map((file, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{file}</TableCell>
+                        <TableCell>
+                          <Button size="sm" variant="outline">Visualizar</Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </DialogContent>
+            </Dialog>
           </CardContent>
         </Card>
 
@@ -121,25 +184,55 @@ const SharesTab = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={chartData}
-                  dataKey="filesShared"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  label
-                >
-                  {chartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.fill} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
+            <Dialog>
+              <DialogTrigger asChild>
+                <div className="cursor-pointer w-full h-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={chartData}
+                        dataKey="filesShared"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={80}
+                        label
+                        onClick={handlePieClick}
+                      >
+                        {chartData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.fill} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Arquivos do departamento {selectedDepartment}</DialogTitle>
+                </DialogHeader>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Arquivo</TableHead>
+                      <TableHead>Ações</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {selectedFiles.map((file, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{file}</TableCell>
+                        <TableCell>
+                          <Button size="sm" variant="outline">Visualizar</Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </DialogContent>
+            </Dialog>
           </CardContent>
         </Card>
       </div>

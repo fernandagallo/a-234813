@@ -9,9 +9,10 @@ interface MetricCardProps {
   total?: number;
   color: string;
   unit?: string;
+  action?: React.ReactNode;
 }
 
-const MetricCard = ({ title, value, total, color, unit = '%' }: MetricCardProps) => {
+const MetricCard = ({ title, value, total, color, unit = '%', action }: MetricCardProps) => {
   const percentage = total ? Math.round((value / total) * 100) : value;
   const displayValue = unit === '%' ? `${percentage}${unit}` : `${value}${unit}`;
   
@@ -35,6 +36,7 @@ const MetricCard = ({ title, value, total, color, unit = '%' }: MetricCardProps)
           {value} de {total} {unit !== '%' ? unit : ''}
         </p>
       )}
+      {action && <div className="mt-3">{action}</div>}
     </div>
   );
 };
