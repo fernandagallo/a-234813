@@ -17,26 +17,30 @@ const MetricCard = ({ title, value, total, color, unit = '%', action }: MetricCa
   const displayValue = unit === '%' ? `${percentage}${unit}` : `${value}${unit}`;
   
   return (
-    <div className="metric-card">
-      <div className="relative w-32 h-32 mb-6">
-        <CircularProgressbar
-          value={percentage}
-          text={displayValue}
-          styles={buildStyles({
-            textSize: '1.25rem',
-            pathColor: color,
-            textColor: color,
-            trailColor: 'rgba(255,255,255,0.1)',
-          })}
-        />
+    <div className="flex flex-col h-full">
+      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm h-full flex flex-col">
+        <div className="flex items-center justify-center mb-4">
+          <div className="relative w-24 h-24">
+            <CircularProgressbar
+              value={percentage}
+              text={displayValue}
+              styles={buildStyles({
+                textSize: '1.25rem',
+                pathColor: color,
+                textColor: color,
+                trailColor: 'rgba(200,200,200,0.3)',
+              })}
+            />
+          </div>
+        </div>
+        <h3 className="text-lg font-medium text-center">{title}</h3>
+        {total && (
+          <p className="text-sm text-gray-500 text-center mt-1">
+            {value} de {total} {unit !== '%' ? unit : ''}
+          </p>
+        )}
+        {action && <div className="mt-auto pt-3 flex justify-center">{action}</div>}
       </div>
-      <h3 className="text-lg font-medium text-dashboard-text">{title}</h3>
-      {total && (
-        <p className="text-sm text-dashboard-muted mt-1">
-          {value} de {total} {unit !== '%' ? unit : ''}
-        </p>
-      )}
-      {action && <div className="mt-3">{action}</div>}
     </div>
   );
 };
