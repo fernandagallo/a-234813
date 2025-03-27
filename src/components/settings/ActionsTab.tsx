@@ -1,11 +1,11 @@
 
 import React, { useState } from 'react';
-import { FileKey, Key, Eye } from 'lucide-react';
+import { FileKey, Key, Eye, Check } from 'lucide-react';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { actionsData } from '@/data/mockData';
 import { getActionColor } from '@/utils/statusUtils';
-import CustomerRequests from '@/components/CustomerRequests';
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Popover,
   PopoverContent,
@@ -23,10 +23,21 @@ const userAssignments = [
 
 const ActionsTab = () => {
   const filesToEncrypt = actionsData.filter(action => action.action === 'Criptografar');
+  const { toast } = useToast();
+  const [regularizedFiles, setRegularizedFiles] = useState<string[]>([]);
   
   // Function to find user assignment by hash
   const getUserAssignment = (hash) => {
     return userAssignments.find(user => user.hash === hash) || { username: "Não atribuído", department: "N/A" };
+  };
+  
+  const handleRegularize = (hash: string, action: string) => {
+    setRegularizedFiles(prev => [...prev, hash]);
+    
+    toast({
+      title: "Arquivo regularizado",
+      description: `A ação "${action}" foi aplicada com sucesso.`,
+    });
   };
   
   return (
@@ -72,11 +83,15 @@ const ActionsTab = () => {
               <TableHead>Tamanho</TableHead>
               <TableHead>Permissões</TableHead>
               <TableHead>Ação</TableHead>
+              <TableHead>Regularizar</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {actionsData.map((action, index) => {
               const { username, department } = getUserAssignment(action.hash);
+              const needsRegularization = action.action === 'Criptografar' || action.action === 'Restringir Acesso';
+              const isRegularized = regularizedFiles.includes(action.hash);
+              
               return (
                 <TableRow key={index}>
                   <TableCell>{username}</TableCell>
@@ -86,6 +101,21 @@ const ActionsTab = () => {
                   <TableCell>{action.size}</TableCell>
                   <TableCell>{action.permissions}</TableCell>
                   <TableCell className={getActionColor(action.action)}>{action.action}</TableCell>
+                  <TableCell>
+                    {needsRegularization && !isRegularized ? (
+                      <Button 
+                        size="sm" 
+                        onClick={() => handleRegularize(action.hash, action.action)}
+                        className="bg-green-500 hover:bg-green-600"
+                      >
+                        Regularizar
+                      </Button>
+                    ) : isRegularized ? (
+                      <span className="inline-flex items-center text-green-500">
+                        <Check className="h-4 w-4 mr-1" /> Regularizado
+                      </span>
+                    ) : null}
+                  </TableCell>
                 </TableRow>
               );
             })}

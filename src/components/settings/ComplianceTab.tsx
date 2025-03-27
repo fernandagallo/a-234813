@@ -1,9 +1,11 @@
 
-import React from 'react';
-import { BookOpen, Shield, FileCheck, ListChecks, CheckCircle, AlertCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { BookOpen, Shield, FileCheck, ListChecks, CheckCircle, AlertCircle, Check } from 'lucide-react';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import { complianceData } from '@/data/mockData';
 import { getStatusColor } from '@/utils/statusUtils';
+import { useToast } from "@/hooks/use-toast";
 import CustomerRequests from '@/components/CustomerRequests';
 
 // Mock user and department data to match with the compliance documents
@@ -16,9 +18,21 @@ const userAssignments = [
 ];
 
 const ComplianceTab = () => {
+  const { toast } = useToast();
+  const [regularizedFiles, setRegularizedFiles] = useState<string[]>([]);
+  
   // Function to find user assignment by hash
   const getUserAssignment = (hash) => {
     return userAssignments.find(user => user.hash === hash) || { username: "Não atribuído", department: "N/A" };
+  };
+
+  const handleRegularize = (hash: string, regulation: string, requirement: string) => {
+    setRegularizedFiles(prev => [...prev, hash]);
+    
+    toast({
+      title: "Arquivo regularizado",
+      description: `Requisito "${requirement}" de ${regulation} atendido com sucesso.`,
+    });
   };
 
   return (
@@ -39,11 +53,15 @@ const ComplianceTab = () => {
               <TableHead>Regulamento</TableHead>
               <TableHead>Requisito</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Regularizar</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {complianceData.map((compliance, index) => {
               const { username, department } = getUserAssignment(compliance.hash);
+              const needsRegularization = compliance.status === 'Não Atendido' || compliance.status === 'Em Risco';
+              const isRegularized = regularizedFiles.includes(compliance.hash);
+              
               return (
                 <TableRow key={index}>
                   <TableCell>{username}</TableCell>
@@ -52,7 +70,24 @@ const ComplianceTab = () => {
                   <TableCell className="max-w-xs truncate">{compliance.uri}</TableCell>
                   <TableCell>{compliance.regulation}</TableCell>
                   <TableCell>{compliance.requirement}</TableCell>
-                  <TableCell className={getStatusColor(compliance.status)}>{compliance.status}</TableCell>
+                  <TableCell className={getStatusColor(compliance.status)}>
+                    {isRegularized ? 'Atendido' : compliance.status}
+                  </TableCell>
+                  <TableCell>
+                    {needsRegularization && !isRegularized ? (
+                      <Button 
+                        size="sm" 
+                        onClick={() => handleRegularize(compliance.hash, compliance.regulation, compliance.requirement)}
+                        className="bg-green-500 hover:bg-green-600"
+                      >
+                        Regularizar
+                      </Button>
+                    ) : isRegularized ? (
+                      <span className="inline-flex items-center text-green-500">
+                        <Check className="h-4 w-4 mr-1" /> Regularizado
+                      </span>
+                    ) : null}
+                  </TableCell>
                 </TableRow>
               );
             })}
