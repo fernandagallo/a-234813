@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { FileKey, Key, Eye, Check } from 'lucide-react';
+import { FileKey, Key, Eye, Check, XCircle } from 'lucide-react';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { actionsData } from '@/data/mockData';
 import { getActionColor } from '@/utils/statusUtils';
@@ -25,6 +25,7 @@ const ActionsTab = () => {
   const filesToEncrypt = actionsData.filter(action => action.action === 'Criptografar');
   const { toast } = useToast();
   const [regularizedFiles, setRegularizedFiles] = useState<string[]>([]);
+  const [ignoredFiles, setIgnoredFiles] = useState<string[]>([]);
   
   // Function to find user assignment by hash
   const getUserAssignment = (hash) => {
@@ -37,6 +38,15 @@ const ActionsTab = () => {
     toast({
       title: "Arquivo regularizado",
       description: `A ação "${action}" foi aplicada com sucesso.`,
+    });
+  };
+  
+  const handleIgnore = (hash: string) => {
+    setIgnoredFiles(prev => [...prev, hash]);
+    
+    toast({
+      title: "Arquivo ignorado",
+      description: "Este arquivo foi marcado como ignorado e não aparecerá nas ações pendentes.",
     });
   };
   
@@ -83,14 +93,17 @@ const ActionsTab = () => {
               <TableHead>Tamanho</TableHead>
               <TableHead>Permissões</TableHead>
               <TableHead>Ação</TableHead>
-              <TableHead>Regularizar</TableHead>
+              <TableHead className="w-56">Opções</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {actionsData.map((action, index) => {
               const { username, department } = getUserAssignment(action.hash);
-              const needsRegularization = action.action === 'Criptografar' || action.action === 'Restringir Acesso';
+              const needsRegularization = action.action === 'Criptografar' || action.action === 'Restringir Acesso' || action.action === 'Colocar em Quarentena' || action.action === 'Mascarar';
               const isRegularized = regularizedFiles.includes(action.hash);
+              const isIgnored = ignoredFiles.includes(action.hash);
+              
+              if (isIgnored) return null;
               
               return (
                 <TableRow key={index}>
@@ -103,13 +116,23 @@ const ActionsTab = () => {
                   <TableCell className={getActionColor(action.action)}>{action.action}</TableCell>
                   <TableCell>
                     {needsRegularization && !isRegularized ? (
-                      <Button 
-                        size="sm" 
-                        onClick={() => handleRegularize(action.hash, action.action)}
-                        className="bg-green-500 hover:bg-green-600"
-                      >
-                        Regularizar
-                      </Button>
+                      <div className="flex space-x-2">
+                        <Button 
+                          size="sm" 
+                          onClick={() => handleRegularize(action.hash, action.action)}
+                          className="bg-green-500 hover:bg-green-600"
+                        >
+                          Regularizar
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleIgnore(action.hash)}
+                          className="border-gray-300 text-gray-500 hover:bg-gray-100"
+                        >
+                          Ignorar
+                        </Button>
+                      </div>
                     ) : isRegularized ? (
                       <span className="inline-flex items-center text-green-500">
                         <Check className="h-4 w-4 mr-1" /> Regularizado
@@ -123,7 +146,7 @@ const ActionsTab = () => {
         </Table>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
         <div className="dashboard-card">
           <div className="flex items-center gap-3 mb-4">
             <FileKey className="w-5 h-5 text-purple-400" />
@@ -149,6 +172,24 @@ const ActionsTab = () => {
           </div>
           <p className="text-4xl font-bold text-blue-500">7</p>
           <p className="text-dashboard-muted mt-2">Arquivos a monitorar</p>
+        </div>
+
+        <div className="dashboard-card">
+          <div className="flex items-center gap-3 mb-4">
+            <XCircle className="w-5 h-5 text-yellow-400" />
+            <h2 className="text-xl font-medium">Quarentena</h2>
+          </div>
+          <p className="text-4xl font-bold text-yellow-500">4</p>
+          <p className="text-dashboard-muted mt-2">Arquivos a isolar</p>
+        </div>
+
+        <div className="dashboard-card">
+          <div className="flex items-center gap-3 mb-4">
+            <Eye className="w-5 h-5 text-green-400" />
+            <h2 className="text-xl font-medium">Mascarar</h2>
+          </div>
+          <p className="text-4xl font-bold text-green-500">5</p>
+          <p className="text-dashboard-muted mt-2">Dados a mascarar</p>
         </div>
       </div>
     </>

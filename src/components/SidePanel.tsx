@@ -1,6 +1,6 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LayoutDashboard, Settings, Users, Shield, Share2, FileText } from "lucide-react";
+import { LayoutDashboard, Settings, Users, Shield, Share2, FileText, Cpu } from "lucide-react";
 
 interface SidePanelProps {
   onTabChange: (value: string) => void;
@@ -38,6 +38,13 @@ const SidePanel = ({ onTabChange }: SidePanelProps) => {
             >
               <FileText className="w-4 h-4" />
               Arquivos
+            </TabsTrigger>
+            <TabsTrigger 
+              value="workstations" 
+              className="w-full justify-start gap-2 data-[state=active]:bg-white/10 data-[state=active]:text-white"
+            >
+              <Cpu className="w-4 h-4" />
+              Estações de Trabalho
             </TabsTrigger>
             <TabsTrigger 
               value="rules" 

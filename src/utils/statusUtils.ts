@@ -24,6 +24,10 @@ export const getActionColor = (action: string): string => {
       return 'text-red-500';
     case 'Monitorar':
       return 'text-blue-500';
+    case 'Colocar em Quarentena':
+      return 'text-yellow-500';
+    case 'Mascarar':
+      return 'text-green-500';
     default:
       return '';
   }
