@@ -27,7 +27,7 @@ const MetricCard = ({ title, value, total, color, unit = '%', action }: MetricCa
   
   return (
     <div className="flex flex-col h-full">
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm h-full flex flex-col">
+      <div className="bg-white dark:bg-dashboard-card border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm h-full flex flex-col">
         <div className="flex items-center justify-center mb-4">
           <div className="relative w-24 h-24">
             <CircularProgressbar
@@ -42,9 +42,9 @@ const MetricCard = ({ title, value, total, color, unit = '%', action }: MetricCa
             />
           </div>
         </div>
-        <h3 className="text-lg font-medium text-center">{title}</h3>
+        <h3 className="text-lg font-medium text-center text-gray-800 dark:text-dashboard-text">{title}</h3>
         {total && (
-          <p className="text-sm text-gray-500 text-center mt-1">
+          <p className="text-sm text-gray-500 dark:text-dashboard-muted text-center mt-1">
             {safeValue} de {safeTotal} {unit !== '%' ? unit : ''}
           </p>
         )}

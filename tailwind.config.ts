@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -25,14 +26,14 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         dashboard: {
-          dark: "#141413",
-          light: "#FAFAF8",
-          accent1: "#8989DE",
-          accent2: "#61AAF2",
-          accent3: "#7EBF8E",
-          text: "#C4C3BB",
-          muted: "#828179",
-          card: "#1A1A19",
+          dark: "#0A1929",     // Azul escuro
+          light: "#E0F2FF",    // Azul claro
+          accent1: "#1E88E5",  // Azul médio
+          accent2: "#0D47A1",  // Azul profundo
+          accent3: "#4FC3F7",  // Azul suave
+          text: "#E3F2FD",     // Texto claro para fundos escuros
+          muted: "#90CAF9",    // Texto com menos ênfase
+          card: "#10203D",     // Fundo de card escuro
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",

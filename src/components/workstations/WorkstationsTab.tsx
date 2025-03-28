@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Monitor, Cpu, Shield, Info, User, FileText, Wifi, Home, AlertTriangle, Check, X } from 'lucide-react';
+import { Monitor, Cpu, Shield, Info, User, FileText, Wifi, Home, AlertTriangle, Check, X, Mail, Download } from 'lucide-react';
 import { workstationsData } from '@/data/mockData';
 import { getStatusColor } from '@/utils/statusUtils';
 import { useToast } from "@/hooks/use-toast";
@@ -26,6 +26,14 @@ import {
 } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import MetricCard from '../MetricCard';
+import { 
+  ChartContainer, 
+  ChartTooltip, 
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent
+} from "@/components/ui/chart";
+import { Bar, BarChart, XAxis, YAxis, CartesianGrid, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 // Add additional workstation information for the new features
 const enhancedWorkstationsData = workstationsData.map(station => ({
@@ -34,7 +42,9 @@ const enhancedWorkstationsData = workstationsData.map(station => ({
   securityLevel: ["Baixo", "Médio", "Alto", "Crítico"][Math.floor(Math.random() * 4)],
   antivirusStatus: Math.random() > 0.3 ? "Atualizado" : "Expirado",
   certificationStatus: Math.random() > 0.3 ? "Válido" : "Expirado",
-  lastAntivirusUpdate: new Date(Date.now() - Math.floor(Math.random() * 90 * 24 * 60 * 60 * 1000)).toISOString().split('T')[0]
+  lastAntivirusUpdate: new Date(Date.now() - Math.floor(Math.random() * 90 * 24 * 60 * 60 * 1000)).toISOString().split('T')[0],
+  downloadVolume: Math.floor(Math.random() * 1000),
+  emailVolume: Math.floor(Math.random() * 500)
 }));
 
 const accessLevelOptions = [
@@ -93,6 +103,58 @@ const WorkstationsTab = () => {
   const criticalSecurityWorkstations = workstations.filter(
     station => station.securityLevel === "Crítico"
   ).length;
+
+  // Dados para o gráfico de análise cruzada
+  const crossAnalysisData = [
+    {
+      categoria: 'Home Office',
+      quantidade: remoteWorkstations,
+      downloadVolume: workstations
+        .filter(station => station.isRemote)
+        .reduce((sum, station) => sum + station.downloadVolume, 0) / (remoteWorkstations || 1),
+      emailVolume: workstations
+        .filter(station => station.isRemote)
+        .reduce((sum, station) => sum + station.emailVolume, 0) / (remoteWorkstations || 1),
+    },
+    {
+      categoria: 'Regularização',
+      quantidade: needsRegularization,
+      downloadVolume: workstations
+        .filter(station => station.antivirusStatus === "Expirado" || station.certificationStatus === "Expirado")
+        .reduce((sum, station) => sum + station.downloadVolume, 0) / (needsRegularization || 1),
+      emailVolume: workstations
+        .filter(station => station.antivirusStatus === "Expirado" || station.certificationStatus === "Expirado")
+        .reduce((sum, station) => sum + station.emailVolume, 0) / (needsRegularization || 1),
+    },
+    {
+      categoria: 'Alto Risco',
+      quantidade: criticalSecurityWorkstations,
+      downloadVolume: workstations
+        .filter(station => station.securityLevel === "Crítico")
+        .reduce((sum, station) => sum + station.downloadVolume, 0) / (criticalSecurityWorkstations || 1),
+      emailVolume: workstations
+        .filter(station => station.securityLevel === "Crítico")
+        .reduce((sum, station) => sum + station.emailVolume, 0) / (criticalSecurityWorkstations || 1),
+    }
+  ];
+
+  // Configuração do gráfico
+  const chartConfig = {
+    downloadVolume: {
+      label: "Volume de Downloads",
+      theme: {
+        light: "#1E88E5",
+        dark: "#1E88E5"
+      }
+    },
+    emailVolume: {
+      label: "Volume de Emails",
+      theme: {
+        light: "#4FC3F7",
+        dark: "#4FC3F7"
+      }
+    }
+  };
   
   return (
     <>
@@ -102,15 +164,15 @@ const WorkstationsTab = () => {
       </header>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <Card>
+        <Card className="bg-dashboard-card border-white/10">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-medium flex items-center">
-              <Monitor className="w-5 h-5 mr-2 text-blue-500" />
+            <CardTitle className="text-lg font-medium flex items-center text-dashboard-text">
+              <Monitor className="w-5 h-5 mr-2 text-dashboard-accent1" />
               Total de Estações
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-4xl font-bold">{workstations.length}</p>
+            <p className="text-4xl font-bold text-dashboard-text">{workstations.length}</p>
             <p className="text-dashboard-muted mt-2">Estações monitoradas</p>
           </CardContent>
         </Card>
@@ -119,18 +181,18 @@ const WorkstationsTab = () => {
           title="Estações Remotas"
           value={remoteWorkstations}
           total={workstations.length}
-          color="#8B5CF6"
+          color="#1E88E5"
           unit=""
           action={
-            <Badge variant="outline" className="flex items-center gap-1 mt-2">
+            <Badge variant="outline" className="flex items-center gap-1 mt-2 border-dashboard-accent1 text-dashboard-accent1">
               <Home className="h-4 w-4" /> Home Office
             </Badge>
           }
         />
         
-        <Card>
+        <Card className="bg-dashboard-card border-white/10">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-medium flex items-center">
+            <CardTitle className="text-lg font-medium flex items-center text-dashboard-text">
               <AlertTriangle className="w-5 h-5 mr-2 text-amber-500" />
               Necessitam Regularização
             </CardTitle>
@@ -150,28 +212,122 @@ const WorkstationsTab = () => {
           color="#F43F5E"
           unit=""
           action={
-            <Badge variant="outline" className="flex items-center gap-1 mt-2">
+            <Badge variant="outline" className="flex items-center gap-1 mt-2 border-red-500/30 text-red-400">
               <Shield className="h-4 w-4" /> Alto Risco
             </Badge>
           }
         />
+      </div>
+
+      <div className="dashboard-card mb-6">
+        <h2 className="text-xl font-medium mb-4 flex items-center text-dashboard-text">
+          <FileText className="w-5 h-5 mr-2 text-dashboard-accent1" />
+          Análise Cruzada de Risco e Transferência de Dados
+        </h2>
+        <p className="text-dashboard-muted mb-6">
+          Relação entre máquinas de alto risco, em home office ou que necessitam regularização, e seus volumes de transferência de dados
+        </p>
+        
+        <div className="h-80">
+          <ChartContainer
+            config={chartConfig}
+            className="h-full bg-dashboard-card"
+          >
+            <BarChart
+              data={crossAnalysisData}
+              margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <XAxis 
+                dataKey="categoria" 
+                tick={{ fill: '#E3F2FD' }}
+                axisLine={{ stroke: 'rgba(255,255,255,0.2)' }}
+              />
+              <YAxis 
+                tick={{ fill: '#E3F2FD' }}
+                axisLine={{ stroke: 'rgba(255,255,255,0.2)' }}
+                label={{ 
+                  value: 'Volume Médio', 
+                  angle: -90, 
+                  position: 'insideLeft',
+                  fill: '#E3F2FD' 
+                }}
+              />
+              <Tooltip 
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    return (
+                      <div className="bg-dashboard-card p-4 border border-white/10 rounded-md shadow-lg">
+                        <p className="font-medium text-dashboard-text">{payload[0].payload.categoria}</p>
+                        <p className="text-dashboard-muted">Qtd. de Máquinas: {payload[0].payload.quantidade}</p>
+                        <p className="text-dashboard-accent1">Downloads: {Math.round(payload[0].payload.downloadVolume)} MB</p>
+                        <p className="text-dashboard-accent3">Emails: {Math.round(payload[0].payload.emailVolume)} emails</p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Legend
+                verticalAlign="bottom"
+                wrapperStyle={{ paddingTop: 20 }}
+                formatter={(value) => (
+                  <span className="text-dashboard-text">
+                    {value === 'downloadVolume' ? 'Volume de Downloads (MB)' : 'Volume de Emails (qty)'}
+                  </span>
+                )}
+              />
+              <Bar 
+                dataKey="downloadVolume" 
+                name="downloadVolume"
+                fill="#1E88E5"
+                radius={[4, 4, 0, 0]}
+              >
+                {crossAnalysisData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill="#1E88E5" />
+                ))}
+              </Bar>
+              <Bar 
+                dataKey="emailVolume" 
+                name="emailVolume"
+                fill="#4FC3F7"
+                radius={[4, 4, 0, 0]}
+              >
+                {crossAnalysisData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill="#4FC3F7" />
+                ))}
+              </Bar>
+            </BarChart>
+          </ChartContainer>
+        </div>
+        
+        <div className="flex justify-center mt-6 gap-8">
+          <div className="flex items-center">
+            <Download className="w-5 h-5 mr-2 text-dashboard-accent1" />
+            <span className="text-dashboard-text">Volume de Downloads</span>
+          </div>
+          <div className="flex items-center">
+            <Mail className="w-5 h-5 mr-2 text-dashboard-accent3" />
+            <span className="text-dashboard-text">Volume de Emails</span>
+          </div>
+        </div>
       </div>
       
       <div className="dashboard-card mb-6">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>ID</TableHead>
-              <TableHead>Hostname</TableHead>
-              <TableHead>Proprietário</TableHead>
-              <TableHead>Departamento</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Nível de Segurança</TableHead>
-              <TableHead>Antivírus</TableHead>
-              <TableHead>Certificações</TableHead>
-              <TableHead>Nível de Acesso</TableHead>
-              <TableHead>Peso de Segurança</TableHead>
-              <TableHead>Ações</TableHead>
+              <TableHead className="text-dashboard-text">ID</TableHead>
+              <TableHead className="text-dashboard-text">Hostname</TableHead>
+              <TableHead className="text-dashboard-text">Proprietário</TableHead>
+              <TableHead className="text-dashboard-text">Departamento</TableHead>
+              <TableHead className="text-dashboard-text">Status</TableHead>
+              <TableHead className="text-dashboard-text">Nível de Segurança</TableHead>
+              <TableHead className="text-dashboard-text">Antivírus</TableHead>
+              <TableHead className="text-dashboard-text">Certificações</TableHead>
+              <TableHead className="text-dashboard-text">Nível de Acesso</TableHead>
+              <TableHead className="text-dashboard-text">Peso de Segurança</TableHead>
+              <TableHead className="text-dashboard-text">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

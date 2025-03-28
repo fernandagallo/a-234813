@@ -76,28 +76,22 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-dashboard-dark text-dashboard-text;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
-/* Dark mode styles */
-body {
-  background-color: #111827;
-  color: white;
-}
-
 /* Dashboard card styles */
 .dashboard-card {
-  @apply bg-gray-800 rounded-lg p-6 border border-gray-700;
+  @apply bg-dashboard-card rounded-lg p-6 border border-white/10;
 }
 
 .glass-card {
-  @apply bg-gray-900/50 backdrop-blur-lg;
+  @apply bg-dashboard-dark/70 backdrop-blur-lg border border-white/10;
 }
 
 .text-dashboard-muted {
-  @apply text-gray-400;
+  @apply text-dashboard-muted;
 }
 
 /* React Flow custom styles */
@@ -110,13 +104,13 @@ body {
 }
 
 .react-flow__controls {
-  @apply bg-gray-800 border border-gray-700;
+  @apply bg-dashboard-card border border-white/10;
 }
 
 .react-flow__controls-button {
-  @apply bg-gray-800 border-gray-700 text-white hover:bg-gray-700;
+  @apply bg-dashboard-card border-white/10 text-white hover:bg-dashboard-dark;
 }
 
 .react-flow__attribution {
-  @apply text-gray-500;
+  @apply text-dashboard-muted;
 }
