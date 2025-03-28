@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,7 +34,6 @@ import {
 } from "@/components/ui/chart";
 import { Bar, BarChart, XAxis, YAxis, CartesianGrid, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
-// Add additional workstation information for the new features
 const enhancedWorkstationsData = workstationsData.map(station => ({
   ...station,
   isRemote: Math.random() > 0.5,
@@ -104,7 +102,6 @@ const WorkstationsTab = () => {
     station => station.securityLevel === "Crítico"
   ).length;
 
-  // Dados para o gráfico de análise cruzada
   const crossAnalysisData = [
     {
       categoria: 'Home Office',
@@ -138,7 +135,6 @@ const WorkstationsTab = () => {
     }
   ];
 
-  // Configuração do gráfico
   const chartConfig = {
     downloadVolume: {
       label: "Volume de Downloads",
@@ -315,8 +311,8 @@ const WorkstationsTab = () => {
       
       <div className="dashboard-card mb-6">
         <Table>
-          <TableHeader>
-            <TableRow>
+          <TableHeader className="bg-dashboard-dark/20">
+            <TableRow className="hover:bg-dashboard-dark/30">
               <TableHead className="text-dashboard-text">ID</TableHead>
               <TableHead className="text-dashboard-text">Hostname</TableHead>
               <TableHead className="text-dashboard-text">Proprietário</TableHead>
@@ -332,11 +328,15 @@ const WorkstationsTab = () => {
           </TableHeader>
           <TableBody>
             {workstations.map((station, index) => (
-              <TableRow key={station.id} className={
-                (station.antivirusStatus === "Expirado" || station.certificationStatus === "Expirado") 
-                  ? "bg-amber-50 dark:bg-amber-950/20" 
-                  : ""
-              }>
+              <TableRow 
+                key={station.id} 
+                className={`
+                  ${(station.antivirusStatus === "Expirado" || station.certificationStatus === "Expirado") 
+                    ? "bg-dashboard-dark/10 hover:bg-dashboard-dark/20" 
+                    : "hover:bg-dashboard-dark/10"}
+                  border-b border-white/10
+                `}
+              >
                 <TableCell>{station.id}</TableCell>
                 <TableCell className="font-medium">{station.hostname}</TableCell>
                 <TableCell>{station.owner}</TableCell>
