@@ -13,8 +13,17 @@ interface MetricCardProps {
 }
 
 const MetricCard = ({ title, value, total, color, unit = '%', action }: MetricCardProps) => {
-  const percentage = total ? Math.round((value / total) * 100) : value;
-  const displayValue = unit === '%' ? `${percentage}${unit}` : `${value}${unit}`;
+  // Garantir que value seja um número válido
+  const safeValue = typeof value === 'number' && !isNaN(value) ? value : 0;
+  
+  // Garantir que total seja um número válido se fornecido
+  const safeTotal = typeof total === 'number' && !isNaN(total) && total > 0 ? total : 1;
+  
+  // Calcular a porcentagem com segurança
+  const percentage = total ? Math.round((safeValue / safeTotal) * 100) : safeValue;
+  
+  // Formatar valor de exibição
+  const displayValue = unit === '%' ? `${percentage}${unit}` : `${safeValue}${unit}`;
   
   return (
     <div className="flex flex-col h-full">
@@ -36,7 +45,7 @@ const MetricCard = ({ title, value, total, color, unit = '%', action }: MetricCa
         <h3 className="text-lg font-medium text-center">{title}</h3>
         {total && (
           <p className="text-sm text-gray-500 text-center mt-1">
-            {value} de {total} {unit !== '%' ? unit : ''}
+            {safeValue} de {safeTotal} {unit !== '%' ? unit : ''}
           </p>
         )}
         {action && <div className="mt-auto pt-3 flex justify-center">{action}</div>}
