@@ -90,7 +90,8 @@
   @apply bg-dashboard-dark/70 backdrop-blur-lg border border-white/10;
 }
 
-.text-dashboard-muted {
+/* Muted text utility class - fixed circular dependency */
+.text-dashboard-muted-class {
   @apply text-dashboard-muted;
 }
 
