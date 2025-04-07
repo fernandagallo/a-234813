@@ -1,4 +1,3 @@
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LayoutDashboard, Settings, Users, Shield, Share2, FileText, Cpu, Logs } from "lucide-react";
 
@@ -30,7 +29,7 @@ const SidePanel = ({ onTabChange }: SidePanelProps) => {
               className="w-full justify-start gap-2 data-[state=active]:bg-white/10 data-[state=active]:text-white"
             >
               <Users className="w-4 h-4" />
-              Usuários
+              Pessoas
             </TabsTrigger>
             <TabsTrigger 
               value="files" 
