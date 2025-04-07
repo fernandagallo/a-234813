@@ -86,9 +86,8 @@ const MonthlyChart = () => {
     });
   };
 
-  // Fixed CustomTooltip to safely check for undefined values
   const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length > 0) {
+    if (active && payload && payload.length) {
       return (
         <div className="bg-white/90 dark:bg-gray-800/90 p-2 shadow rounded border border-gray-200 dark:border-gray-700">
           <p className="font-medium">{`${payload[0].payload.month}`}</p>
@@ -101,9 +100,8 @@ const MonthlyChart = () => {
     return null;
   };
 
-  // Fixed CrossRefTooltip to safely check for undefined values
   const CrossRefTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length > 0) {
+    if (active && payload && payload.length) {
       return (
         <div className="bg-white/90 dark:bg-gray-800/90 p-2 shadow rounded border border-gray-200 dark:border-gray-700">
           <p className="font-medium">{`${label}`}</p>
